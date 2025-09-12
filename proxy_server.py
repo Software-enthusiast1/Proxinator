@@ -7,14 +7,12 @@ FORM_HTML = '''
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Python Proxy</title>
+  <title>Proxinator</title>
 </head>
 <body>
-  <h2>Python Web Proxy</h2>
   <form method="post">
     <label for="url">Enter a URL:</label>
     <input type="text" id="url" name="url" placeholder="http://example.com" size="40" required>
-    <button type="submit">Go</button>
   </form>
   {error}
 </body>

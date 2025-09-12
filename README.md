@@ -11,7 +11,6 @@ Press "Open in browser" and then you are done!\
 If you would like to quit, go to the terminal and press CTRL+C
 \
 # TODO
-Allow support for https and not just http\
 Fetch CSS Styling and embeded HTML\
 Allow links to work\
 Make it look nicer
