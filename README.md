@@ -11,6 +11,5 @@ Press "Open in browser" and then you are done!\
 If you would like to quit, go to the terminal and press CTRL+C
 \
 # TODO
-Fetch CSS Styling and embeded HTML\
-Allow links to work\
-Make it look nicer
+Make it look nicer with css\
+Fix images and other embeded content\

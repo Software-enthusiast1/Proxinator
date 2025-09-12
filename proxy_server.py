@@ -10,6 +10,19 @@ FORM_HTML = '''
 <html>
 <head>
   <title>Google</title>
+  <style>
+    body {{ background: black; }}
+    h2 {{ color: #003366; }}
+    input[type="text"] {{
+        display: block; /* Ensures the input acts as a block-level element */
+        margin: 0 auto; /* Centers the block horizontally */
+        width: 50%; /* Example width, adjust as needed */
+    }}
+    form {{ margin-top: 2em; }}
+    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; }}
+    button {{ font-size: 1.2em; padding: 8px 16px; background: #0074d9; color: white; border: none; border-radius: 4px; cursor: pointer; }}
+    button:hover {{ background: #005fa3; }}
+  </style>
 </head>
 <body>
   <form method="post" action="/">
