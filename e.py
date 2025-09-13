@@ -9,23 +9,17 @@ HTML_FORM = '''
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Python Web Proxy</title>
+  <title>Google</title>
   <style>
-    body {{ background: #e6f0ff; }}
-    h2 {{ color: #003366; }}
+    body {{ background: #00004d; }}
     form {{ margin-top: 2em; }}
-    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; }}
-    button {{ font-size: 1.2em; padding: 8px 16px; background: #0074d9; color: white; border: none; border-radius: 4px; cursor: pointer; }}
-    button:hover {{ background: #005fa3; }}
+    input[type="text"] {{ color: #000000; background: #cccccc; width: 400px; font-size: 1.2em; padding: 8px; display: block; margin: 0 auto;}}
     .error {{ color: red; }}
   </style>
 </head>
 <body>
-  <h2>Python Web Proxy</h2>
   <form method="post" action="/">
-    <label for="url">Enter a URL:</label>
-    <input type="text" id="url" name="url" placeholder="http://example.com" required>
-    <button type="submit">Go</button>
+    <input type="text" id="url" name="url" placeholder="Enter URL" required>
   </form>
   {error}
 </body>
