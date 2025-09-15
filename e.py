@@ -9,19 +9,165 @@ FORM_HTML = '''
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Google</title>
+  <title>Python Web Proxy</title>
   <style>
-    body {{ background: #008080; }}
-    form {{ margin-top: 2em; }}
-    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; display: block; margin: 0 auto;}}
+    html, body {{ height: 100%; margin: 0; padding: 0; }}
+    #particles-js {{
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      background: #222;
+    }}
+    body {{
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }}
+    .center-content {{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      background: rgba(255,255,255,0.85);
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      text-align: center;
+    }}
+    h2 {{ color: #003366; margin-bottom: 1em; }}
+    form {{ margin-top: 1em; }}
+    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; }}
+    button {{ font-size: 1.2em; padding: 8px 16px; background: #0074d9; color: white; border: none; border-radius: 4px; cursor: pointer; }}
+    button:hover {{ background: #005fa3; }}
     .error {{ color: red; }}
   </style>
+  <!-- Import particles.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
-  <form method="post" action="/">
-    <input type="text" id="url" name="url" placeholder="Enter URL here" size="40" required>
-  </form>
-  {error}
+  <div id="particles-js"></div>
+  <div class="center-content">
+    <h2>Python Web Proxy</h2>
+    <form method="post" action="/">
+      <label for="url">Enter a URL:</label>
+      <input type="text" id="url" name="url" placeholder="http://example.com" required>
+      <button type="submit">Go</button>
+    </form>
+    {error}
+  </div>
+  <!-- Initialize particles.js -->
+  <script>
+    particlesJS("particles-js", {{
+      "particles": {{
+        "number": {{
+          "value": 80,
+          "density": {{
+            "enable": true,
+            "value_area": 800
+          }}
+        }},
+        "color": {{
+          "value": "#2196F3"
+        }},
+        "shape": {{
+          "type": "circle",
+          "stroke": {{
+            "width": 0,
+            "color": "#000000"
+          }},
+          "polygon": {{
+            "nb_sides": 5
+          }}
+        }},
+        "opacity": {{
+          "value": 0.5,
+          "random": false,
+          "anim": {{
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }}
+        }},
+        "size": {{
+          "value": 3,
+          "random": true,
+          "anim": {{
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }}
+        }},
+        "line_linked": {{
+          "enable": true,
+          "distance": 150,
+          "color": "#2196F3",
+          "opacity": 0.4,
+          "width": 1
+        }},
+        "move": {{
+          "enable": true,
+          "speed": 6,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {{
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }}
+        }}
+      }},
+      "interactivity": {{
+        "detect_on": "canvas",
+        "events": {{
+          "onhover": {{
+            "enable": true,
+            "mode": "repulse"
+          }},
+          "onclick": {{
+            "enable": true,
+            "mode": "push"
+          }},
+          "resize": true
+        }},
+        "modes": {{
+          "grab": {{
+            "distance": 400,
+            "line_linked": {{
+              "opacity": 1
+            }}
+          }},
+          "bubble": {{
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          }},
+          "repulse": {{
+            "distance": 200,
+            "duration": 0.4
+          }},
+          "push": {{
+            "particles_nb": 4
+          }},
+          "remove": {{
+            "particles_nb": 2
+          }}
+        }}
+      }},
+      "retina_detect": true
+    }});
+  </script>
 </body>
 </html>
 '''
