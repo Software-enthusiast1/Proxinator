@@ -10,6 +10,12 @@ FORM_HTML = '''
 <html>
 <head>
   <title>Google</title>
+  <style>
+    body {{ background: #008080; }}
+    form {{ margin-top: 2em; }}
+    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; display: block; margin: 0 auto;}}
+    .error {{ color: red; }}
+  </style>
 </head>
 <body>
   <form method="post" action="/">
