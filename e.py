@@ -5,21 +5,15 @@ from urllib.parse import urljoin
 
 app = flask.Flask(__name__)
 
-HTML_FORM = '''
+FORM_HTML = '''
 <!DOCTYPE html>
 <html>
 <head>
   <title>Google</title>
-  <style>
-    body {{ background: #00004d; }}
-    form {{ margin-top: 2em; }}
-    input[type="text"] {{ color: #000000; background: #cccccc; width: 400px; font-size: 1.2em; padding: 8px; display: block; margin: 0 auto;}}
-    .error {{ color: red; }}
-  </style>
 </head>
 <body>
   <form method="post" action="/">
-    <input type="text" id="url" name="url" placeholder="Enter URL" required>
+    <input type="text" id="url" name="url" placeholder="Enter URL here" size="40" required>
   </form>
   {error}
 </body>
@@ -27,49 +21,74 @@ HTML_FORM = '''
 '''
 
 def rewrite_html_assets(html, page_url):
-    # Rewrite asset URLs to go through the proxy
-    def rewrite(pattern, repl):
-        return re.sub(pattern, repl, html, flags=re.IGNORECASE)
+    # Rewrite <link href="..."> for CSS
+    def repl_link(match):
+        before = match.group(1)
+        href = match.group(2)
+        after = match.group(3)
+        abs_url = urljoin(page_url, href)
+        return f'<link{before}href="/asset?url={abs_url}"{after}>'
+    html = re.sub(r'<link([^>]*)href=["\']([^"\']+)["\']([^>]*)>', repl_link, html, flags=re.IGNORECASE)
 
-    html = rewrite(r'<link([^>]*)href=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<link{m.group(1)}href="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<script([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<script{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<img([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<img{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<video([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<video{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<audio([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<audio{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<source([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<source{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<embed([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<embed{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
-    html = rewrite(r'<iframe([^>]*)src=["\']([^"\']+)["\']([^>]*)>', lambda m: f'<iframe{m.group(1)}src="/asset?url={urljoin(page_url, m.group(2))}"{m.group(3)}>')
+    # Rewrite <script src="..."> for JS
+    def repl_script(match):
+        before = match.group(1)
+        src = match.group(2)
+        after = match.group(3)
+        abs_url = urljoin(page_url, src)
+        return f'<script{before}src="/asset?url={abs_url}"{after}>'
+    html = re.sub(r'<script([^>]*)src=["\']([^"\']+)["\']([^>]*)>', repl_script, html, flags=re.IGNORECASE)
 
-    # Navigation
+    # Rewrite <img src="..."> for images
+    def repl_img(match):
+        before = match.group(1)
+        src = match.group(2)
+        after = match.group(3)
+        abs_url = urljoin(page_url, src)
+        return f'<img{before}src="/asset?url={abs_url}"{after}>'
+    html = re.sub(r'<img([^>]*)src=["\']([^"\']+)["\']([^>]*)>', repl_img, html, flags=re.IGNORECASE)
+
+    # Rewrite <a href="..."> for navigation
     def repl_a(match):
-        before, href, after = match.group(1), match.group(2), match.group(3)
+        before = match.group(1)
+        href = match.group(2)
+        after = match.group(3)
+        abs_url = urljoin(page_url, href)
+        # Don't rewrite anchor, mailto, javascript links
         if href.startswith('#') or href.startswith('mailto:') or href.startswith('javascript:'):
             return f'<a{before}href="{href}"{after}>'
-        abs_url = urljoin(page_url, href)
-        return f'<a{before}href="/?url={abs_url}"{after}>'
+        else:
+            return f'<a{before}href="/?url={abs_url}"{after}>'
     html = re.sub(r'<a([^>]*)href=["\']([^"\']+)["\']([^>]*)>', repl_a, html, flags=re.IGNORECASE)
 
     return html
 
 def rewrite_css_urls(css, css_url):
-    def url_repl(m):
-        asset = m.group(1).strip('\'"')
-        return f"url(/asset?url={urljoin(css_url, asset)})"
-    css = re.sub(r'url\(([^)]+)\)', url_repl, css)
-    def import_repl(m):
-        asset = m.group(1).strip('\'"')
-        return f'@import "/asset?url={urljoin(css_url, asset)}"'
-    css = re.sub(r'@import\s+["\']([^"\']+)["\']', import_repl, css)
+    def repl_url(match):
+        orig_url = match.group(1).strip('\'"')
+        abs_url = urljoin(css_url, orig_url)
+        return f'url(/asset?url={abs_url})'
+    css = re.sub(r'url\(([^)]+)\)', repl_url, css)
+
+    def repl_import(match):
+        import_url = match.group(1).strip('\'"')
+        abs_url = urljoin(css_url, import_url)
+        return f'@import "/asset?url={abs_url}"'
+    css = re.sub(r'@import\s+["\']([^"\']+)["\']', repl_import, css)
     return css
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     error = ""
     url = ""
+    show_form = True
     if flask.request.method == "POST":
         url = flask.request.form.get("url")
+        show_form = False
     elif flask.request.method == "GET":
         url = flask.request.args.get("url")
+        if url:
+            show_form = False
     if url:
         try:
             resp = requests.get(url, allow_redirects=True)
@@ -78,13 +97,20 @@ def home():
             if 'text/html' in content_type:
                 html = resp.content.decode(resp.encoding or 'utf-8', errors='replace')
                 html = rewrite_html_assets(html, final_url)
-                return html
+                # Only show the form if show_form is True
+                if show_form:
+                    return FORM_HTML.format(error=error) + "<hr>" + html
+                else:
+                    return html
             else:
-                return "<pre>" + resp.content.decode('utf-8', errors='replace') + "</pre>"
+                if show_form:
+                    return FORM_HTML.format(error=error) + "<hr><pre>" + resp.content.decode('utf-8', errors='replace') + "</pre>"
+                else:
+                    return "<pre>" + resp.content.decode('utf-8', errors='replace') + "</pre>"
         except Exception as e:
-            error = f'<p class="error">Error: {e}</p>'
-            return HTML_FORM.format(error=error)
-    return HTML_FORM.format(error=error)
+            error = f"<p style='color:red;'>Error: {e}</p>"
+            return FORM_HTML.format(error=error)
+    return FORM_HTML.format(error=error)
 
 @app.route("/asset")
 def asset():
