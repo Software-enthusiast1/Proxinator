@@ -9,7 +9,7 @@ FORM_HTML = '''
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Python Web Proxy</title>
+  <title>Google</title>
   <style>
     html, body {{ height: 100%; margin: 0; padding: 0; }}
     #particles-js {{
@@ -33,17 +33,15 @@ FORM_HTML = '''
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
-      background: rgba(255,255,255,0.85);
+      background: rgba(102, 102, 102,0.75);
       padding: 2em;
       border-radius: 10px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.2);
       text-align: center;
     }}
-    h2 {{ color: #003366; margin-bottom: 1em; }}
+    h2 {{ color: #0a6fc2; margin-bottom: 1em; }}
     form {{ margin-top: 1em; }}
     input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; }}
-    button {{ font-size: 1.2em; padding: 8px 16px; background: #0074d9; color: white; border: none; border-radius: 4px; cursor: pointer; }}
-    button:hover {{ background: #005fa3; }}
     .error {{ color: red; }}
   </style>
   <!-- Import particles.js from CDN -->
@@ -52,11 +50,9 @@ FORM_HTML = '''
 <body>
   <div id="particles-js"></div>
   <div class="center-content">
-    <h2>Python Web Proxy</h2>
+    <h2>Proxinator</h2>
     <form method="post" action="/">
-      <label for="url">Enter a URL:</label>
-      <input type="text" id="url" name="url" placeholder="http://example.com" required>
-      <button type="submit">Go</button>
+      <input type="text" id="url" name="url" placeholder="Enter a URL" required>
     </form>
     {error}
   </div>
@@ -65,7 +61,7 @@ FORM_HTML = '''
     particlesJS("particles-js", {{
       "particles": {{
         "number": {{
-          "value": 80,
+          "value": 120,
           "density": {{
             "enable": true,
             "value_area": 800
