@@ -6,6 +6,7 @@ Start by creating a codespace on main \
 Go to the terminal and eneter the command: "pip install flask requests" You will not have to run this command again after you run it the first time\
 Now run "python e.py"\
 Press "Open in browser" and then you are done!\
+Make sure that your URL's include "HTTPS://"\
 \
 If you would like to quit, go to the terminal and press CTRL+C
 \

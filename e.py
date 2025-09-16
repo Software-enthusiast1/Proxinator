@@ -39,9 +39,9 @@ FORM_HTML = '''
       box-shadow: 0 4px 24px rgba(0,0,0,0.2);
       text-align: center;
     }}
-    h2 {{ color: #0a6fc2; margin-bottom: 1em; }}
+    h2 {{ color: #0a6fc2; font-size: 120; font-family: monospace;}}
     form {{ margin-top: 1em; }}
-    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; }}
+    input[type="text"] {{ width: 400px; font-size: 1.2em; padding: 8px; border-radius: 10px; border: 3px solid #ccc;}}
     .error {{ color: red; }}
   </style>
   <!-- Import particles.js from CDN -->
@@ -50,7 +50,7 @@ FORM_HTML = '''
 <body>
   <div id="particles-js"></div>
   <div class="center-content">
-    <h2>Proxinator</h2>
+    <h2>Ze Proxinator<br></h2>
     <form method="post" action="/">
       <input type="text" id="url" name="url" placeholder="Enter a URL" required>
     </form>
