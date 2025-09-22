@@ -61,7 +61,7 @@ FORM_HTML = '''
     particlesJS("particles-js", {{
       "particles": {{
         "number": {{
-          "value": 120,
+          "value": 150,
           "density": {{
             "enable": true,
             "value_area": 800
@@ -150,7 +150,7 @@ FORM_HTML = '''
             "speed": 3
           }},
           "repulse": {{
-            "distance": 200,
+            "distance": 150,
             "duration": 0.4
           }},
           "push": {{
@@ -232,6 +232,10 @@ def home():
     show_form = True
     if flask.request.method == "POST":
         url = flask.request.form.get("url")
+        if "http" in url:
+            url = url
+        else:
+            url = "https://" + url
         show_form = False
     elif flask.request.method == "GET":
         url = flask.request.args.get("url")

@@ -13,4 +13,3 @@ If you would like to quit, go to the terminal and press CTRL+C
 # TODO
 Fix images and other embeded content\
 Make it so that the page always listens to any updates or changes to the page after it already loads\
-Make it automaticly add https://
